@@ -7,7 +7,8 @@ import Link from 'next/link'
 import { Favicon } from 'favicon-stealer'
 
 export function FriendCard({ friend, titleAs }: { friend: FriendItemType, titleAs?: keyof React.JSX.IntrinsicElements }) {
-  const utmLink = `${friend.link.href}?utm_source=${utm_source}`
+  const hasLink = friend.link.href && friend.link.href !== '#'
+  const utmLink = hasLink ? `${friend.link.href}?utm_source=${utm_source}` : '#'
   let Component = titleAs ?? 'h2'
   return (
     <li className='group relative flex flex-col items-start h-full'>
@@ -28,13 +29,17 @@ export function FriendCard({ friend, titleAs }: { friend: FriendItemType, titleA
           )}
         </div>
 
-        <Link
-          href={utmLink}
-          target='_blank'
-          rel='noopener noreferrer nofollow'
-          className='h-full w-full absolute'>
-          <ArrowUpRight size={32} weight="duotone" className="absolute top-2 right-8 h-4 w-4 group-hover:text-primary" />
-        </Link>
+        {hasLink ? (
+          <Link
+            href={utmLink}
+            target='_blank'
+            rel='noopener noreferrer nofollow'
+            className='h-full w-full absolute'>
+            <ArrowUpRight size={32} weight="duotone" className="absolute top-2 right-8 h-4 w-4 group-hover:text-primary" />
+          </Link>
+        ) : (
+          <ArrowUpRight size={32} weight="duotone" className="absolute top-2 right-8 h-4 w-4 text-muted-foreground/40" />
+        )}
       </div>
     </li>
   )
