@@ -1,70 +1,26 @@
 // changelog
-export const changelogHeadLine = "What's new about this site"
-export const changelogIntro = "Check out the latest changes to this site."
+export const changelogHeadLine = "本站更新日志"
+export const changelogIntro = "记录本博客的迭代与变化。"
 
-
-// changelog
 export type ChangelogItemType = {
   date: string
-  content: [{
-    title: string
-    description: string
-  }]
+  content: [
+    {
+      title: string
+      description: string
+    },
+  ]
 }
 
 export const changelogList: Array<ChangelogItemType> = [
   {
-    date: '2024-11-18',
+    date: '2026-05-04',
     content: [
       {
-        title: '💡 Idea come up',
-        description: 'I want to have a portfolio websit. The website doesn\'t need to be so fancy but should have a good design. It need to show all my projects and have a blog section to share my ideas and my development experience.'
+        title: '🚀 基于模板初始化个人博客',
+        description:
+          '基于 Corey Chiu Portfolio Template 搭建个人博客，替换为中文内容配置，包含 8 个精选项目展示、职业经历、技术图标云等模块。',
       },
-    ]
+    ],
   },
-  {
-    date: '2024-11-22',
-    content: [
-      {
-        title: '🛫 Project deployed',
-        description: 'My portfolio website\'s first version finished building and deployed'
-      },
-    ]
-  },
-  {
-    date: '2024-12-10',
-    content: [
-      {
-        title: '👭 Add friends page',
-        description: 'Add friends page to list my friends'
-      },
-    ]
-  },
-  {
-    date: '2024-12-23',
-    content: [
-      {
-        title: '🐍 Add GitHub Contribution snake',
-        description: 'Add GitHub Contribution snake to showcase my GitHub contribution in a funny way'
-      },
-    ]
-  },
-  {
-    date: '2024-12-24',
-    content: [
-      {
-        title: '📦 Add resources page',
-        description: 'Add resources page to list my using and recommended resources'
-      },
-    ]
-  },
-  {
-    date: '2024-12-25',
-    content: [
-      {
-        title: '🐦‍⬛ Add activity section',
-        description: 'Add activity section to showcase my activity snippets'
-      },
-    ]
-  }
 ]
