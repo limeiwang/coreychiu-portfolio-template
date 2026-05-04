@@ -1,167 +1,86 @@
 // projects
-export const projectHeadLine = "What I've done and what I'm doing."
-export const projectIntro = "I've worked on a variety of projects, from simple websites to complex web applications. And many of them are open-source. Here are a few of my favorites."
+export const projectHeadLine = "我所做的与正在做的事。"
+export const projectIntro = "从智慧城市到 AI 应用，从企业级系统到独立产品——这里是我参与和主导过的一些代表性项目。"
 
 export type ProjectItemType = {
-    name: string
-    description: string
-    link: { href: string, label: string }
-    date?: string
-    logo?: string,
-    category?: string[],
-    tags?: string[],
-    image?: string,
-    techStack?: string[],
-    gitStars?: number,
-    gitForks?: number
-  }
-  
-  // projects 
-  export const projects: Array<ProjectItemType> = [
-    {
-      name: '轻息',
-      description:
-        '一款呼吸训练、缓解压力、提升专注力的“小而美”app',
-      link: { href: 'apps.apple.com/us/app/%E8%BD%BB%E6%81%AF/id6742171445', label: '轻息' },
-      category: ['App'],
-      techStack: ['SwiftUI'],
-      tags: ['App', 'iOS'],
-      logo: '/images/icon/breathe-app-icon.png',
-    },
-    {
-      name: 'SEO Explore',
-      description:
-        'Explore all the best SEO tools in one place.',
-      link: { href: 'seoexplore.com', label: 'SEO Explore' },
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['SEO']
-    },
-    {
-      name: 'GitHub Cards',
-      description:
-        'Showcase your GitHub contributions into stunning visual cards.',
-      link: { href: 'github.cards', label: 'GitHub Cards' },
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['Visual Cards', 'GitHub Contribution Cards']
-    },
-    {
-      name: 'AI Best Tools',
-      description:
-        'Find the best AI tools in AIBest.tools',
-      link: { href: 'aibest.tools', label: 'AI Best Tools' },
-      logo: 'images/icon/aibesttools.png',
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['AI', 'Tools Directory']
-    },
-    {
-      name: 'Best Directories',
-      description:
-        'Your ultimate directory of directories.',
-      link: { href: 'bestdirectories.org', label: 'Best Directories' },
-      logo: '/images/icon/bestdirectories.png',
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['Directory of Directories']
-    },
-    {
-      name: 'User Growth',
-      description:
-        'Boost Your business growth with UserGrowth.link',
-      link: { href: 'usergrowth.link', label: 'User Growth' },
-      logo: '/images/icon/usergrowth.ico',
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['User Growth', 'Marketing', 'SEO']
-    },
-    {
-      name: 'Dev Toolset',
-      description:
-        'Open-source database-free tools directory.',
-      link: { href: 'devtoolset.net', label: 'Dev Toolset' },
-      logo: '/images/icon/devtoolset.png',
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['Open Source', 'Database-Free', 'Tools Directory']
-    },
-    {
-      name: 'Domain Score',
-      description:
-        'Ultimate AI-Powered tool for domain scoring and evaluation',
-      link: { href: 'domainscore.ai', label: 'Domain Score' },
-      logo: '/images/icon/domainscore.png',
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['Domain', 'AI', 'SEO']
-    },
-    {
-      name: 'MagicBox Tools',
-      description:
-        'Find the best AI tools in MagicBox.tools',
-      link: { href: 'magicbox.tools', label: 'MagicBox Tools' },
-      logo: '/images/icon/magicbox.png',
-      category: ['Website'],
-      techStack: ['Next.js', 'TailwindCSS', 'Shadcn/UI'],
-      tags: ['AI', 'Tools Directory']
-    },
-  ]
-  
-  export const githubProjects: Array<ProjectItemType> = [
-    {
-      name: 'Devtoolset',
-      description: 'Open-source & database-free developer tools navigator / 开源无数据库配置的开发者工具导航站',
-      link: { href: 'github.com/iAmCorey/devtoolset', label: 'Devtoolset' },
-      gitStars: 203,
-      gitForks: 67
-    },
-    {
-      name: 'Corey Chiu Portfolio Template',
-      description:
-        'portfolio template by corey chiu',
-      link: { href: 'github.com/iAmCorey/coreychiu-portfolio-template', label: 'Corey Chiu Portfolio Template' },
-      gitStars: 229,
-      gitForks: 30
-    },
-    {
-      name: 'Chrome Extension Plasmo Template',
-      description:
-        'A chrome extension template using plasmo, tailwind css, shadcn/ui',
-      link: { href: 'github.com/iAmCorey/chrome-extension-plasmo-template', label: 'Chrome Extension Plasmo Template' },
-      gitStars: 54,
-      gitForks: 10
-    },
-    {
-      name: 'Awesome Indie Hacker Tools',
-      description:
-        '独立开发/出海开发相关技术栈及工具收录 / Find the best tools for indie hackers here',
-      link: { href: 'github.com/iAmCorey/awesome-indie-hacker-tools', label: 'Awesome Indie Hacker Tools' },
-      gitStars: 815,
-      gitForks: 69
-    },
-    {
-      name: 'Awesome AI Directory',
-      description:
-        'AI资源工具导航站收录 / Find all the best AI directories',
-      link: { href: 'github.com/iAmCorey/awesome-ai-directory', label: 'Awesome AI Directory' },
-      gitStars: 40,
-      gitForks: 7
-    },
-    {
-      name: 'Producthunt Daily Bot',
-      description:
-        'A bot getting product hunt daily top products',
-      link: { href: 'github.com/iAmCorey/producthunt-daily-bot', label: 'Producthunt Daily Bot' },
-      gitStars: 3,
-      gitForks: 3
-    },
-    {
-      name: 'Cantonese Echoes',
-      description:
-        'Cantonese Echoes / 粵語殘片',
-      link: { href: 'github.com/iAmCorey/Cantonese-Echoes', label: 'Cantonese Echoes' },
-      gitStars: 1
-    },
-  ]
-  
+  name: string
+  description: string
+  link: { href: string; label: string }
+  date?: string
+  logo?: string
+  category?: string[]
+  tags?: string[]
+  image?: string
+  techStack?: string[]
+  gitStars?: number
+  gitForks?: number
+}
+
+export const projects: Array<ProjectItemType> = [
+  {
+    name: '电商视频分镜AI',
+    description: 'AI 驱动的电商视频分镜生成器，上传商品图片即可自动生成包含 9 个镜头的专业级视频分镜脚本，支持 TikTok、抖音、Amazon 多平台适配。',
+    link: { href: '#', label: '电商视频分镜AI' },
+    techStack: ['Next.js 16', 'TypeScript', 'Prisma', 'PostgreSQL', '豆包大模型', '智谱 GLM-4V'],
+    tags: ['AI', '电商', '视频生成', 'SaaS'],
+  },
+  {
+    name: 'Product Image Generator',
+    description: '面向电商的 AI 商品图片生成工具，基于 SDXL + LoRA 实现背景移除与场景图合成，支持多平台尺寸适配与批量处理。',
+    link: { href: '#', label: 'Product Image Generator' },
+    techStack: ['Python', 'FastAPI', 'PyTorch', 'SDXL', 'LoRA', 'Docker'],
+    tags: ['AI', '图片生成', '电商', 'Python'],
+  },
+  {
+    name: '戒烟助手',
+    description: '基于 uni-app 的跨平台 AI 戒烟辅助微信小程序，提供戒烟计划制定、进度追踪与 AI 智能建议。',
+    link: { href: '#', label: '戒烟助手' },
+    techStack: ['uni-app', 'Vue 3', 'uniCloud', '微信小程序'],
+    tags: ['AI', '微信小程序', '健康'],
+  },
+  {
+    name: '门店经营数字化系统',
+    description: '面向连锁门店的 SaaS 数字化经营系统，集 POS 收银、会员管理、商品库存与小程序商城于一体，内置 AI OCR 智能入库功能。',
+    link: { href: '#', label: '门店经营数字化系统' },
+    techStack: ['Vue 3', 'Pinia', 'uni-app', 'Express', 'Sequelize', 'MySQL', 'JWT'],
+    tags: ['SaaS', '全栈', 'POS收银', 'AI OCR'],
+  },
+  {
+    name: '深圳前海地下道路智慧化管控平台',
+    description: '基于微前端架构（Qiankun）的智慧交通管控系统，实现地下道路设备联动、实时预警与应急处置，前端加载速度提升 20%，内存占用降低 30%。',
+    link: { href: '#', label: '前海智慧管控' },
+    techStack: ['Vue 3', 'Qiankun', '高德地图 API', 'ECharts', '若依框架'],
+    tags: ['智慧城市', '微前端', '交通管控'],
+  },
+  {
+    name: '城市数智推演仿真平台',
+    description: '"1+3+6+N"架构的城市级 3D 仿真推演平台，集成 Cesium + Unity 实现二维数据与三维场景实时联动，覆盖政策模拟、地块更新、交通治理等核心功能。获区域数字经济创新奖。',
+    link: { href: '#', label: '城市推演仿真' },
+    techStack: ['Vue 3', 'Cesium', 'Unity', 'ECharts', 'TypeScript'],
+    tags: ['智慧城市', '3D 仿真', '数字孪生'],
+  },
+  {
+    name: '上海临港基础设施全量运管平台',
+    description: '城市新基建运营管理平台，统一接入 14 类 150+ 智能网联设备，实现设备全生命周期管理、拓扑可视化与运维闭环，故障处理效率提升 50%。已复制推广至沧州等地。',
+    link: { href: '#', label: '临港运管平台' },
+    techStack: ['Vue 3', 'Element-UI', '高德地图 API', 'ECharts', 'WebSocket', 'uni-app'],
+    tags: ['智慧城市', 'IoT', '设备运维'],
+  },
+  {
+    name: '智合极创 Admin',
+    description: '基于 React 19 + React Router v7 构建的通用管理后台框架，内置权限管理、Markdown 编辑器与 Docker 一键部署方案，可作为新项目的启动脚手架。',
+    link: { href: '#', label: '智合极创 Admin' },
+    techStack: ['React 19', 'React Router v7', 'TypeScript', 'TailwindCSS 4', 'Zustand'],
+    tags: ['管理后台', 'React', '开源'],
+  },
+]
+
+export const githubProjects: Array<ProjectItemType> = [
+  {
+    name: 'coreychiu-portfolio-template',
+    description: '基于 Next.js 16 + TailwindCSS + Shadcn/UI 的个人博客模板，支持 MDX 博客、RSS、多分析工具与暗色模式。',
+    link: { href: 'github.com/limeiwang/coreychiu-portfolio-template', label: 'Portfolio Template' },
+    gitStars: 0,
+    gitForks: 0,
+  },
+]
