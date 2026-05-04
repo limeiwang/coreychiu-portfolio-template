@@ -18,9 +18,9 @@
 | 语言 | 中文 |
 | 社交媒体 | GitHub (https://github.com/limeiwang), 微信 (Limw0321) |
 
-## 技术图标（21 个）
+## 技术图标（20 个）
 
-前 端：vuedotjs, react, nextdotjs, typescript, javascript, tailwindcss, vite, webpack, pinia
+前 端：react, nextdotjs, typescript, javascript, tailwindcss, vite, webpack, pinia
 后 端：nodedotjs, prisma, postgresql, supabase
 AI：openai
 工具平台：vercel, docker, git, github, visualstudiocode
