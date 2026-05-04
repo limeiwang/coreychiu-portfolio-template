@@ -91,7 +91,7 @@ export default async function Home() {
             {blogList.map((blog: BlogType) => (
               <BlogCard key={blog.slug} blog={blog} titleAs='h3'/>
             ))}
-            <Link href="/blogs" className="flex flex-row items-center text-sm text-primary hover:underline capitalize font-semibold">Read more blogs 
+            <Link href="/blogs" className="flex flex-row items-center text-sm text-primary hover:underline capitalize font-semibold">更多文章 
               <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
             </Link>
           </div>

@@ -13,7 +13,7 @@ export function BlogCard({ blog, titleAs }: { blog: BlogType, titleAs?: keyof Re
         {formatDate(blog.date)}
       </Card.Eyebrow>
       <Card.Description>{blog.description}</Card.Description>
-      <Card.Cta>Read blog</Card.Cta>
+      <Card.Cta>阅读文章</Card.Cta>
     </Card>
   )
 }
