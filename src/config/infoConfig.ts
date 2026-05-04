@@ -7,105 +7,68 @@ export * from './activity'
 
 
 // personal info
-export const name = 'Corey Chiu'
-export const headline = 'Software engineer, Full-Stack web developer, and indie hacker.'
-export const introduction = 'I’m Corey, a software engineer based in Shenzhen, China. I like coding, and building interesting things'
-export const email = 'xxx@gmail.com'
-export const githubUsername = 'iamcorey'
+export const name = '李美旺'
+export const headline = 'AI 应用工程师 · 前端架构师 · 内容系统与智能应用构建者'
+export const introduction = '我是一名前端工程师，拥有 6 年+开发经验，专注于 AI 应用系统与复杂 Web 架构的设计与实现。过去参与过智慧城市可视化平台、企业级内容管理系统，以及 AI 电商分镜生成、智能学习助手等应用的开发，覆盖从前端工程到系统架构的完整链路。我更关注如何将 AI 能力工程化落地，转化为可实际使用的产品与系统，而不仅仅是技术实现。'
+export const email = '19322932086@163.com'
+export const githubUsername = 'limeiwang'
 
 // about page
-export const aboutMeHeadline = "I'm Corey Chiu, a software engineer based in Shenzhen, China."
+export const aboutMeHeadline = '我是李美旺，一名专注于 AI 应用与复杂 Web 架构的前端工程师。'
 export const aboutParagraphs = [
-  "I love coding. I learned programming when I in college. I wrote my first program in Java when I was 18.",
-  "I have a lot of hobbies, such as travelling, photography, watching movies, music and so on.",
-  "I'm working as a software develop engineer in Shenzhen, China now. And I'm building a lot of side projects in my spare time."
+  '我拥有 6 年+开发经验，技术栈覆盖 Vue 3、React、TypeScript、Node.js，具备从 0 到 1 搭建大型系统的全栈能力。我既能在 Vue 生态中高效构建企业级后台与数据可视化大屏，也能在 React 生态中使用 Next.js、Prisma 等技术栈快速交付 AI 驱动的全栈应用。',
+  '过去几年，我深度参与了智慧城市、数字道路、城市仿真等大型项目，主导了微前端架构方案（Qiankun + Vite）在多个产品线的落地。同时，我也积极探索 AI 技术在前端领域的应用——从 AI 电商视频分镜生成，到商品图片智能处理，再到微信小程序端的 AI 辅助工具，持续拓展前端工程师在 AI 时代的边界。',
+  '目前，我正致力于将 AI 能力工程化落地，探索大模型在实际业务场景中的价值。我相信，好的工程师不仅要能写出高质量的代码，更要能将技术与商业需求结合，打造真正解决问题的产品。',
 ]
 
-
 // blog
-export const blogHeadLine = "What I've thinking about."
-export const blogIntro = "I've written something about AI, programming and life."
-
+export const blogHeadLine = 'AI 应用实践 · 架构设计 · 产品落地思考'
+export const blogIntro = '记录我在 AI 应用开发、前端架构设计和产品商业化方面的一些思考与实践。'
 
 // social links
 export type SocialLinkType = {
-  name: string,
-  ariaLabel?: string,
-  icon: string,
-  href: string,
+  name: string
+  ariaLabel?: string
+  icon: string
+  href: string
   external?: boolean
 }
 
 export const socialLinks: Array<SocialLinkType> = [
   {
-    name: 'X',
-    icon: 'x',
-    href: 'https://x.com/realcoreychiu',
-    external: true
-  },
-  {
-    name: 'Bsky',
-    icon: 'bsky',
-    href: 'https://bsky.app/profile/coreychiu.com',
-    external: true
-  },
-  {
-    name: 'Jike',
-    icon: 'pill',
-    href: 'https://okjk.co/P7c1zU',
-    external: true
-  },
-  {
     name: 'Github',
     icon: 'github',
-    href: 'https://github.com/iamcorey',
-    external: true
+    href: 'https://github.com/limeiwang',
+    external: true,
   },
   {
     name: 'Wechat',
     icon: 'wechat',
     href: 'https://mp.weixin.qq.com/s/DxnRgqNfgzXIhqj6w_x0dQ',
-    external: true
+    external: true,
   },
-  {
-    name: 'Discord',
-    icon: 'discord',
-    href: 'https://discord.gg/xTxRg3Ej',
-    external: true
-  },
-  {
-    name: 'Ko-fi',
-    icon: 'coffee',
-    href: 'https://ko-fi.com/coreychiu',
-    external: true
-  }
 ]
 
 // https://simpleicons.org/
 export const techIcons = [
-  "typescript",
-  "javascript",
-  "supabase",
-  "cloudflare",
-  "java",
-  "oracle",
-  "mysql",
-  "react",
-  "nodedotjs",
-  "nextdotjs",
-  "prisma",
-  "postgresql",
-  "nginx",
-  "vercel",
-  "docker",
-  "git",
-  "github",
-  "visualstudiocode",
-  "androidstudio",
-  "ios",
-  "apple",
-  "wechat"
-];
-
-
-
+  'react',
+  'nextdotjs',
+  'typescript',
+  'javascript',
+  'tailwindcss',
+  'vite',
+  'webpack',
+  'pinia',
+  'nodedotjs',
+  'prisma',
+  'postgresql',
+  'supabase',
+  'openai',
+  'vercel',
+  'docker',
+  'git',
+  'github',
+  'visualstudiocode',
+  'mapbox',
+  'wechat',
+]
