@@ -66,15 +66,15 @@ export const socialLinks: Array<SocialLinkType> = [
     external: true,
   },
   {
-    name: '小红书',
-    icon: 'xiaohongshu',
-    href: 'https://www.xiaohongshu.com/user/profile/62df411c000000001f0071d8',
-    external: true,
-  },
-  {
     name: '抖音',
     icon: 'douyin',
     href: 'https://www.douyin.com/user/self?from_tab_name=main',
+    external: true,
+  },
+  {
+    name: '小红书',
+    icon: 'xiaohongshu',
+    href: 'https://www.xiaohongshu.com/user/profile/62df411c000000001f0071d8',
     external: true,
   },
 ]
