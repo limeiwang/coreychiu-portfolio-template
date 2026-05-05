@@ -47,6 +47,36 @@ export const socialLinks: Array<SocialLinkType> = [
     icon: 'wechat',
     qrCode: '/wechat.jpg',
   },
+  {
+    name: '掘金',
+    icon: 'juejin',
+    href: 'https://juejin.cn/user/2928754708977630',
+    external: true,
+  },
+  {
+    name: 'B站',
+    icon: 'bilibili',
+    href: 'https://space.bilibili.com/1741141708',
+    external: true,
+  },
+  {
+    name: '微博',
+    icon: 'weibo',
+    href: 'https://weibo.com/u/5622811457',
+    external: true,
+  },
+  {
+    name: '小红书',
+    icon: 'xiaohongshu',
+    href: 'https://www.xiaohongshu.com/user/profile/62df411c000000001f0071d8',
+    external: true,
+  },
+  {
+    name: '抖音',
+    icon: 'douyin',
+    href: 'https://www.douyin.com/user/self?from_tab_name=main',
+    external: true,
+  },
 ]
 
 // https://simpleicons.org/
