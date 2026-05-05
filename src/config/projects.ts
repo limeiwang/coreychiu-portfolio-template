@@ -32,18 +32,18 @@ export const projects: Array<ProjectItemType> = [
     tags: ['Chrome扩展', 'AI工具', '浏览器插件'],
   },
   {
-    name: '地图工厂',
-    description: '基于 Vue 3 的地图工具应用，支持坐标系统转换（WGS84/GCJ02/BD09）、地理数据文件压缩与批量处理，集成 Element Plus UI。',
-    link: { href: '#', label: '地图工厂' },
-    techStack: ['Vue 3', 'TypeScript', 'Vite', 'Element Plus', 'Pinia', 'coordtransform'],
-    tags: ['地图', 'Vue', '坐标转换'],
-  },
-  {
     name: 'Product Image Generator',
     description: '面向电商的 AI 商品图片生成工具，基于 SDXL + LoRA 实现背景移除与场景图合成，支持多平台尺寸适配与批量处理。',
     link: { href: '#', label: 'Product Image Generator' },
     techStack: ['Python', 'FastAPI', 'PyTorch', 'SDXL', 'LoRA', 'Docker'],
     tags: ['AI', '图片生成', '电商', 'Python'],
+  },
+  {
+    name: '地图工厂',
+    description: '基于 Vue 3 的地图工具应用，支持坐标系统转换（WGS84/GCJ02/BD09）、地理数据文件压缩与批量处理，集成 Element Plus UI。',
+    link: { href: '#', label: '地图工厂' },
+    techStack: ['Vue 3', 'TypeScript', 'Vite', 'Element Plus', 'Pinia', 'coordtransform'],
+    tags: ['地图', 'Vue', '坐标转换'],
   },
   {
     name: '门店经营数字化系统',
