@@ -16,8 +16,8 @@ import {
 
 function SvgIcon({ size, children }: { size: number; children: React.ReactNode }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      {children}
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" opacity="0.85">
+      <g transform="translate(1.5, 1.5) scale(0.875)">{children}</g>
     </svg>
   )
 }
