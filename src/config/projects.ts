@@ -34,11 +34,12 @@ export const projects: Array<ProjectItemType> = [
     tags: ['Chrome扩展', 'AI工具', '浏览器插件'],
   },
   {
-    name: 'Product Image Generator',
-    description: '面向电商的 AI 商品图片生成工具，基于 SDXL + LoRA 实现背景移除与场景图合成，支持多平台尺寸适配与批量处理。',
-    link: { href: '#', label: 'Product Image Generator' },
-    techStack: ['Python', 'FastAPI', 'PyTorch', 'SDXL', 'LoRA', 'Docker'],
-    tags: ['AI', '图片生成', '电商', 'Python'],
+    name: 'Pixel Pet 像素宠物助手',
+    description: 'Chrome 浏览器像素风格悬浮宠物助手，集成番茄钟、笔记、待办与自定义提醒功能，支持 4 种职业主题皮肤，纯 CSS 像素动画实现。',
+    link: { href: '#', label: 'Pixel Pet' },
+    logo: '/images/projects/pixel-pet.png',
+    techStack: ['Chrome Extension', 'Manifest V3', 'CSS Pixel Art', 'Side Panel API'],
+    tags: ['Chrome扩展', '番茄钟', '像素风格', '效率工具'],
   },
   {
     name: '地图工厂',
