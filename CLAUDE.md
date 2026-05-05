@@ -47,7 +47,7 @@ Blog posts live as `.mdx` files in `src/content/blog/`. Each file has frontmatte
 | `/friends` | `src/app/friends/page.tsx` | Friends page |
 | `/changelog` | `src/app/changelog/page.tsx` | Changelog page |
 | `/feed` | `src/app/feed/route.ts` | RSS feed (XML) |
-| `/api/visit-stats` | `src/app/api/visit-stats/route.ts` | Visitor stats from OpenPanel API |
+| `/api/visit-stats` | `src/app/api/visit-stats/route.ts` | Visitor counter (local file-based, stores in `/tmp/blog-visit-stats/`) |
 | `robots.ts` | `src/app/robots.ts` | Dynamic robots.txt |
 | `sitemap.ts` | `src/app/sitemap.ts` | Dynamic sitemap |
 
@@ -75,9 +75,9 @@ The `<Layout>` component (`src/components/layout/Layout.tsx`) renders `<Header>`
 
 See `.env.example`. Key variables:
 - `NEXT_PUBLIC_SITE_URL` — required for RSS feed, sitemap, and robots.txt
-- `NEXT_PUBLIC_OPENPANEL_CLIENT_ID` / `OPENPANEL_API_SECRET_ID` / `OPENPANEL_PROJECT_ID` — visitor stats
 - `NEXT_PUBLIC_GOOGLE_ANALYTICS_ID` — Google Analytics
 - `NEXT_PUBLIC_PLAUSIBLE_URL` / `NEXT_PUBLIC_PLAUSIBLE_SRC` — Plausible Analytics
+- OpenPanel env vars (`NEXT_PUBLIC_OPENPANEL_CLIENT_ID` etc.) are no longer needed — visit stats now use local file-based storage
 
 ### GitHub Actions
 
@@ -101,9 +101,12 @@ The WeChat social link uses `qrCode: '/wechat.jpg'` instead of `href`. Both `Soc
 
 `ProjectCard` and `FriendCard` check for `href === '#'` and conditionally skip the `<Link>` overlay wrapper. Next.js `Link` cannot prefetch malformed URLs like `https://#?...`, which would cause runtime errors. Projects without public URLs should use `link: { href: '#', ... }`.
 
-### API Graceful Degradation
+### Visit Counter
 
-`/api/visit-stats` returns `{ totalUV: '-', dailyUV: '-' }` when OpenPanel credentials are not configured, instead of throwing a 500 error.
+`/api/visit-stats` uses local JSON files in `/tmp/blog-visit-stats/` for counting:
+- **GET** returns `{ totalUV, dailyUV }` from `total.json` and `YYYY-MM-DD.json`
+- **POST** increments both counters (called once per session via `sessionStorage` flag)
+- `VisitData` component (`src/components/layout/VisitData.tsx`) counts each session once, then polls every 5 minutes to refresh display
 
 ## Known Pitfalls
 

@@ -34,7 +34,7 @@
     "fast-glob": "^3.3.3",
     "favicon-stealer": "^1.9.0",
     "feed": "^4.2.2",
-    "google": "link:@next/third-parties/google",
+
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.460.0",
     "next": "^16.1.6",

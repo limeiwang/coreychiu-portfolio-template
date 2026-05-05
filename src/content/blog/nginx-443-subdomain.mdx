@@ -1,0 +1,158 @@
+---
+title: '个人服务器架构改造：从多端口混乱到统一 443 + 子域名'
+description: '一台腾讯云轻量服务器运行 5 个项目，从每个服务一个 HTTPS 端口的混乱局面，到统一 443 入口、通配符 SSL、一键部署的现代化方案。'
+date: '2026-05-05'
+---
+
+## 背景
+
+我有一台腾讯云轻量服务器，上面陆续跑了 5 个项目。最初为了方便，每个服务分配了一个独立端口，久而久之变成了这样：
+
+```
+https://www.limw.top:443    → 电商分镜
+https://www.limw.top:3333   → Python 前端
+https://www.limw.top:1667   → Python API
+https://www.limw.top:8088   → POS 收银
+https://www.limw.top:39002  → AI 医疗
+http://www.limw.top:1234    → Vue 项目
+```
+
+存在的问题很明显：非标准端口浏览器会提示不安全，SEO 被降权，前端跨端口请求各种混乱，每次部署都要 SSH 手动操作。
+
+花了两天时间彻底重构，下面是完整的改造过程。
+
+---
+
+## 改造后架构
+
+```
+https://limw.top / www.limw.top     → 博客（Next.js + MDX）
+https://story.limw.top              → 电商视频分镜AI（Next.js + AI）
+https://pos.limw.top                → POS 收银系统（Vue + Express）
+https://py.limw.top                 → Python 服务
+https://doctor.limw.top             → AI 医疗（React）
+HTTP（80端口）                      → 301 跳转 HTTPS
+```
+
+核心思路：**所有服务统一走 443 端口，用子域名区分，一张通配符 SSL 证书覆盖全部**。
+
+---
+
+## 一、SSL 通配符证书
+
+这是最关键的一步。用 acme.sh + Let's Encrypt 免费签发 `*.limw.top` 通配符证书：
+
+```bash
+# 首次申请（手动 DNS 验证）
+export DP_Id='你的SecretId'
+export DP_Key='你的SecretKey'
+/root/.acme.sh/acme.sh --issue -d limw.top -d '*.limw.top' \
+  --dns dns_dp --server letsencrypt
+
+# 安装到 Nginx
+/root/.acme.sh/acme.sh --install-cert -d limw.top -d '*.limw.top' \
+  --key-file /path/to/ssl/your-domain.key \
+  --fullchain-file /path/to/ssl/your-domain_bundle.pem \
+  --reloadcmd "nginx -s reload"
+```
+
+配置了 DNSPod API 自动续期，crontab 每天检查，到期前 30 天自动续签，完全不用管。
+
+---
+
+## 二、Nginx 子域名分发
+
+每个服务一个独立的 Nginx server block，通过 `server_name` 匹配：
+
+```nginx
+# 博客（默认站）
+server {
+    listen 443 ssl;
+    server_name limw.top www.limw.top;
+    location / { proxy_pass http://127.0.0.1:3002; }
+}
+
+# 电商分镜
+server {
+    listen 443 ssl;
+    server_name story.limw.top;
+    location / { proxy_pass http://127.0.0.1:3000; }
+}
+
+# POS 收银（静态前端 + API）
+server {
+    listen 443 ssl;
+    server_name pos.limw.top;
+    location / { root /var/www/pos; try_files $uri $uri/ /index.html; }
+    location /api { proxy_pass http://127.0.0.1:3001; }
+}
+
+# HTTP → HTTPS 强制跳转
+server {
+    listen 80;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+```
+
+关键点：`proxy_pass` 统一用 `127.0.0.1` 而不是公网 IP，避免了流量绕出公网又回来的路由问题。
+
+---
+
+## 三、一键部署
+
+每个项目都配了 `deploy.sh`，修改代码后一个命令搞定：
+
+```bash
+bash deploy.sh
+```
+
+脚本自动完成：打包 → SCP 上传 → 解压 → npm install → npm run build → 重启 PM2 → 清除 Nginx 缓存。
+
+重点修复了两个坑：
+
+1. **tar 目录嵌套**：`--strip-components=1` 解决解压后路径不对的问题
+2. **Nginx proxy_cache**：每次部署清除 Nginx 缓存目录，不然页面永远是旧的
+
+---
+
+## 四、POS 系统接口地址迁移
+
+POS 前端是 Vue 构建产物，JS 里硬编码了旧地址 `https://www.limw.top:8088`。两个方案：
+
+**临时方案** — Nginx sub_filter 自动替换：
+```nginx
+sub_filter_once off;
+sub_filter_types application/javascript;
+sub_filter 'https://www.limw.top:8088' 'https://pos.limw.top';
+```
+
+**根治方案** — 修改 `.env.production` 源码重建：
+```
+VITE_API_BASE_URL='https://pos.limw.top'
+```
+
+---
+
+## 踩坑记录
+
+| 问题 | 原因 | 解决 |
+|------|------|------|
+| 部署后页面不变 | Nginx proxy_cache | 每次构建后清缓存 |
+| 域名访问旧版本 | proxy_pass 走公网 IP 回源 | 改用 127.0.0.1 |
+| 子域名无 HTTPS | 需要通配符证书 | acme.sh + Let's Encrypt |
+| GitHub 克隆超时 | 国内服务器 | ZIP 打包 + SCP 上传 |
+| doctor 域名显示博客 | 端口监听错误 | 39002 → 443 |
+
+---
+
+## 总结
+
+改造前后对比：
+
+- **改造前**：6 个不同端口，手动部署，证书分散，维护痛苦
+- **改造后**：统一 443 入口，子域名清晰，自动续期，一键部署
+
+核心经验：**别在端口上做文章，用子域名做服务隔离，一张通配符证书解决所有 SSL 问题**。
+
+如果你也有类似的"祖传服务器"，强烈建议花一个周末统一一下架构，后续开发体验会好很多。

@@ -15,14 +15,19 @@ export default function VisitData() {
   });
 
   useEffect(() => {
+    // 每次会话只计一次
+    if (typeof window !== 'undefined' && !sessionStorage.getItem('visit-counted')) {
+      sessionStorage.setItem('visit-counted', '1');
+      fetch('/api/visit-stats', { method: 'POST' }).catch(() => {});
+    }
+
     const fetchVisitStats = async () => {
       try {
         const response = await fetch('/api/visit-stats');
         const data = await response.json();
-        // console.log('data: ', data)
         setStats(data);
-      } catch (error) {
-        console.error('Error fetching visit stats:', error);
+      } catch {
+        // ignore
       }
     };
 
