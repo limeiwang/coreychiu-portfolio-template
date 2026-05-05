@@ -88,7 +88,7 @@ export const techIcons = [
   'tailwindcss',
   'vite',
   'webpack',
-  'pinia',
+  'element',
   'nodedotjs',
   'prisma',
   'postgresql',
@@ -98,7 +98,7 @@ export const techIcons = [
   'docker',
   'git',
   'github',
-  'visualstudiocode',
+  'webstorm',
   'mapbox',
   'wechat',
 ]
