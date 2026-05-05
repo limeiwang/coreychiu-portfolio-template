@@ -17,7 +17,7 @@ export const careerList: Array<CareerItemType> = [
     end: '2025.03',
   },
   {
-    company: '软通动力技术服务有限公司（百度）',
+    company: '北京百度网讯科技有限公司',
     title: '前端开发工程师',
     logo: 'bank',
     start: '2019.08',
