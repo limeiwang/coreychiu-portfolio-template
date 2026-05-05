@@ -72,7 +72,7 @@ export const githubProjects: Array<ProjectItemType> = [
   {
     name: 'meiwang-portfolio',
     description: '基于 Next.js 16 + TailwindCSS + Shadcn/UI 的个人博客模板，支持 MDX 博客、RSS、多分析工具与暗色模式。',
-    link: { href: 'github.com/limeiwang/meiwang-portfolio', label: 'Portfolio Template' },
+    link: { href: 'github.com/limeiwang/coreychiu-portfolio-template', label: 'Portfolio Template' },
     gitStars: 0,
     gitForks: 0,
   },
