@@ -30,8 +30,9 @@ export type SocialLinkType = {
   name: string
   ariaLabel?: string
   icon: string
-  href: string
+  href?: string
   external?: boolean
+  qrCode?: string
 }
 
 export const socialLinks: Array<SocialLinkType> = [
@@ -44,8 +45,7 @@ export const socialLinks: Array<SocialLinkType> = [
   {
     name: 'Wechat',
     icon: 'wechat',
-    href: 'https://mp.weixin.qq.com/s/DxnRgqNfgzXIhqj6w_x0dQ',
-    external: true,
+    qrCode: '/wechat.jpg',
   },
 ]
 
