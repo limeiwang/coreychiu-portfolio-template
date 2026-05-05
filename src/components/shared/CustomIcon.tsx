@@ -49,31 +49,31 @@ export function CustomIcon({ name, size = 20 }: { name: string; size?: number })
     case "juejin":
       return (
         <SvgIcon size={size}>
-          <path d="M12 2L2 12l3.5 3.5L12 9l6.5 6.5L22 12 12 2z" />
+          <path d="M12 1.5L2 11.5l3.2 3.2L12 8l6.8 6.7L22 11.5 12 1.5zM5.2 15.5L2 18.7 12 22l10-3.3-3.2-3.2L12 18l-6.8-2.5z" />
         </SvgIcon>
       );
     case "bilibili":
       return (
         <SvgIcon size={size}>
-          <path d="M2 5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2H8l-4 3V5zm8 3v4m4-4v4" stroke="currentColor" strokeWidth="2" fill="none" />
+          <path d="M17.5 3a.5.5 0 010 1H15v1a3 3 0 013 3v7a3 3 0 01-3 3H9a3 3 0 01-3-3V8a3 3 0 013-3h.5l-1-1h2l1.8 1.8L12 7l.7-1.2L14.5 4h2l-1 1H17.5zM6 8v7a3 3 0 003 3h6a3 3 0 003-3V8a3 3 0 00-3-3H9a3 3 0 00-3 3zm3 1h2v2H9V9zm4 0h2v2h-2V9z" />
         </SvgIcon>
       );
     case "weibo":
       return (
         <SvgIcon size={size}>
-          <path d="M12 4a8 8 0 100 16 8 8 0 000-16zm0 2a6 6 0 110 12 6 6 0 010-12zm0 3a3 3 0 100 6 3 3 0 000-6z" />
+          <path d="M10.5 2a8.5 8.5 0 108.2 10.5 4.5 4.5 0 11-6.2-6.2A8.5 8.5 0 0010.5 2zm0 2a6.5 6.5 0 016.4 5.5 2.5 2.5 0 00-3.6 1.8 2.4 2.4 0 00-.2 1 2.5 2.5 0 103.6-2.1A6.5 6.5 0 1110.5 4zm-.3 4a3 3 0 100 6 3 3 0 000-6zm0 1.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
         </SvgIcon>
       );
     case "xiaohongshu":
       return (
         <SvgIcon size={size}>
-          <path d="M4 3h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1zm3 4v2h2V7H7zm0 4v6h2v-6H7zm4-4v8h2V7h-2zm4 0v2h2V7h-2zm0 4v4h2v-4h-2z" />
+          <path d="M5 2h14a2 2 0 012 2v16a2 2 0 01-2 2H5a2 2 0 01-2-2V4a2 2 0 012-2zm0 2v16h14V4H5zm2 2h3v3H7V6zm5 0h5v1h-5V6zm0 3h5v1h-5V9zm0 3h5v1h-5v-1zm-5 2h3v3H7v-3z" />
         </SvgIcon>
       );
     case "douyin":
       return (
         <SvgIcon size={size}>
-          <path d="M9 3v8.5a3.5 3.5 0 11-3.5-3.5c.2 0 .4.02.6.05V5.5A5.5 5.5 0 0010 16.5V3H9zm6 0v1.5c1.1 0 2.1.3 3 .9V3h-3z" />
+          <path d="M16 2v9.5a4 4 0 11-4-4V5a6 6 0 009 4V2h-5zm-1 1.5h3V9a4.5 4.5 0 00-3-1.5v1.5a3 3 0 103 3V7.5h-3V3.5z" />
         </SvgIcon>
       );
     default:
