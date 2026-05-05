@@ -1,8 +1,8 @@
 {
-  "name": "coreychiu-portfolio-template",
+  "name": "meiwang-portfolio",
   "version": "1.0.0",
   "private": true,
-  "author": "Corey Chiu",
+  "author": "Meiwang Li",
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
