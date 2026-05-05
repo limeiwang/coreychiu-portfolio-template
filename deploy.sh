@@ -15,7 +15,7 @@ echo "📤 2/4 上传到服务器..."
 scp "$TAR_FILE" $SERVER:$REMOTE_DIR/
 
 echo "🔨 3/4 安装依赖 & 构建..."
-ssh $SERVER "cd $REMOTE_DIR && rm -rf node_modules .next && tar -xzf blog.tar.gz && npm install && npm run build"
+ssh $SERVER "cd $REMOTE_DIR && rm -rf node_modules .next && tar -xzf blog.tar.gz && npm install && npm run build && rm -rf .next/cache"
 
 echo "🚀 4/4 重启服务..."
 ssh $SERVER "pm2 restart blog && sleep 2 && pm2 status"
