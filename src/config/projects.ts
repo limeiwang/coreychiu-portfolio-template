@@ -32,13 +32,6 @@ export const projects: Array<ProjectItemType> = [
     tags: ['AI', '图片生成', '电商', 'Python'],
   },
   {
-    name: '戒烟助手',
-    description: '基于 uni-app 的跨平台 AI 戒烟辅助微信小程序，提供戒烟计划制定、进度追踪与 AI 智能建议。',
-    link: { href: '#', label: '戒烟助手' },
-    techStack: ['uni-app', 'Vue 3', 'uniCloud', '微信小程序'],
-    tags: ['AI', '微信小程序', '健康'],
-  },
-  {
     name: '门店经营数字化系统',
     description: '面向连锁门店的 SaaS 数字化经营系统，集 POS 收银、会员管理、商品库存与小程序商城于一体，内置 AI OCR 智能入库功能。',
     link: { href: '#', label: '门店经营数字化系统' },
