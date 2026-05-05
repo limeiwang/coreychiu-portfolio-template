@@ -37,7 +37,7 @@ export default async function Home() {
             </p>
             <SocialLinks className='md:mt-24'/>
           </div>
-          <div className="relative flex size-full items-center justify-center overflow-hidden w-full px-20 md:px-0 md:w-2/3 ml-auto md:mr-8">
+          <div className="relative flex size-full items-center justify-center overflow-hidden w-full px-20 md:px-0 md:w-2/3 ml-auto md:mr-8" suppressHydrationWarning>
             <IconCloud iconSlugs={techIcons} />
           </div>
         </div>

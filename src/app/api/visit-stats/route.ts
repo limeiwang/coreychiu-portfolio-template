@@ -6,6 +6,9 @@ const OPENPANEL_SECRET_ID = process.env.OPENPANEL_API_SECRET_ID;
 const OPENPANEL_PROJECT_ID = process.env.OPENPANEL_PROJECT_ID;
 export async function GET() {
   try {
+    if (!OPENPANEL_CLIENT_ID || !OPENPANEL_SECRET_ID || !OPENPANEL_PROJECT_ID) {
+      return NextResponse.json({ totalUV: '-', dailyUV: '-' });
+    }
     // 获取总访问数据
     const response = await fetch(`${OPENPANEL_API_URL}/export/events?projectId=${OPENPANEL_PROJECT_ID}&event=screen_view`, {
       headers: {
