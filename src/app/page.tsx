@@ -13,11 +13,9 @@ import { projectHeadLine, projectIntro, projects, githubProjects, blogHeadLine, 
 import GithubContributions from '@/components/home/GithubCalendar'
 import GitHubSnake from '@/components/home/GitHubSnake'
 import { CustomIcon } from '@/components/shared/CustomIcon'
-import dynamic from 'next/dynamic'
+import IconCloudWrapper from '@/components/home/IconCloudWrapper'
 import Link from 'next/link'
 import { ChevronRightIcon } from 'lucide-react'
-
-const IconCloud = dynamic(() => import('@/components/ui/icon-cloud'), { ssr: false })
 
 
 
@@ -40,7 +38,7 @@ export default async function Home() {
             <SocialLinks className='md:mt-24'/>
           </div>
           <div className="relative flex size-full items-center justify-center overflow-hidden w-full px-20 md:px-0 md:w-2/3 ml-auto md:mr-8">
-            <IconCloud iconSlugs={techIcons} />
+            <IconCloudWrapper iconSlugs={techIcons} />
           </div>
         </div>
         <div className="mt-6 border-t border-zinc-100 py-8 dark:border-zinc-700/40">
