@@ -25,6 +25,20 @@ export const projects: Array<ProjectItemType> = [
     tags: ['AI', '电商', '视频生成', 'SaaS'],
   },
   {
+    name: 'AnchorAI',
+    description: 'AI 对话书签 Chrome 扩展，在 ChatGPT、Claude、DeepSeek、豆包等 20+ AI 平台上标记重要对话节点，支持快速跳转回溯。',
+    link: { href: '#', label: 'AnchorAI' },
+    techStack: ['Chrome Extension', 'Manifest V3', 'JavaScript', 'Service Worker'],
+    tags: ['Chrome扩展', 'AI工具', '浏览器插件'],
+  },
+  {
+    name: '地图工厂',
+    description: '基于 Vue 3 的地图工具应用，支持坐标系统转换（WGS84/GCJ02/BD09）、地理数据文件压缩与批量处理，集成 Element Plus UI。',
+    link: { href: '#', label: '地图工厂' },
+    techStack: ['Vue 3', 'TypeScript', 'Vite', 'Element Plus', 'Pinia', 'coordtransform'],
+    tags: ['地图', 'Vue', '坐标转换'],
+  },
+  {
     name: 'Product Image Generator',
     description: '面向电商的 AI 商品图片生成工具，基于 SDXL + LoRA 实现背景移除与场景图合成，支持多平台尺寸适配与批量处理。',
     link: { href: '#', label: 'Product Image Generator' },
