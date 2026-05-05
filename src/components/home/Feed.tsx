@@ -25,10 +25,10 @@ export default function Feed() {
     <div className="rounded-2xl border p-6 border-muted shadow-sm">
       <h2 className="flex text-sm font-semibold">
         <Rss size={26} weight="duotone" />
-        <span className="ml-3">Subscribe my blogs</span>
+        <span className="ml-3">订阅博客</span>
       </h2>
       <p className="mt-4 ml-1 text-sm text-muted-foreground">
-        Welcome to Subscribe my blogs
+        欢迎通过 RSS 订阅我的博客更新
       </p>
       <div className="mt-4 flex gap-4">
         <div className="relative flex-auto">
@@ -51,15 +51,15 @@ export default function Feed() {
               <ClipboardText size={32} weight="duotone" />
             )}
             <span className="sr-only">
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? '已复制' : '复制'}
             </span>
           </Button>
         </div>
-        <Button 
-          onClick={() => window.open(feedUrl, '_blank')} 
+        <Button
+          onClick={() => window.open(feedUrl, '_blank')}
           className="hidden md:block flex-none bg-primary text-primary-foreground"
         >
-          Subscribe
+          订阅
         </Button>
       </div>
     </div>
