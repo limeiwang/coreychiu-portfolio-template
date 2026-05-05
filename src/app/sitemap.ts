@@ -32,10 +32,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			lastModified: new Date(),
 		},
 		{
-			url: "resources",
-			lastModified: new Date(),
-		},
-		{
 			url: "about",
 			lastModified: new Date(),
 		},
@@ -46,7 +42,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	];
 
 	for (const route of sitemapRoutes) {
-		// console.log(`sitemap, url:${site_url}/${route.url}`);
 		sitemapList.push({
 			url: `${site_url}/${route.url}`,
 			lastModified: new Date(route.lastModified || new Date()).toISOString(),
