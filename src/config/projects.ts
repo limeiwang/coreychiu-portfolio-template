@@ -1,6 +1,6 @@
 // projects
 export const projectHeadLine = "我所做的与正在做的事。"
-export const projectIntro = "从智慧城市到 AI 应用，从企业级系统到独立产品——这里是我参与和主导过的一些代表性项目。"
+export const projectIntro = "从 AI 应用到全栈 SaaS，从独立产品到开源框架——这里是我参与和主导过的一些代表性项目。"
 
 export type ProjectItemType = {
   name: string
@@ -37,27 +37,6 @@ export const projects: Array<ProjectItemType> = [
     link: { href: '#', label: '门店经营数字化系统' },
     techStack: ['Vue 3', 'Pinia', 'uni-app', 'Express', 'Sequelize', 'MySQL', 'JWT'],
     tags: ['SaaS', '全栈', 'POS收银', 'AI OCR'],
-  },
-  {
-    name: '深圳前海地下道路智慧化管控平台',
-    description: '基于微前端架构（Qiankun）的智慧交通管控系统，实现地下道路设备联动、实时预警与应急处置，前端加载速度提升 20%，内存占用降低 30%。',
-    link: { href: '#', label: '前海智慧管控' },
-    techStack: ['Vue 3', 'Qiankun', '高德地图 API', 'ECharts', '若依框架'],
-    tags: ['智慧城市', '微前端', '交通管控'],
-  },
-  {
-    name: '城市数智推演仿真平台',
-    description: '"1+3+6+N"架构的城市级 3D 仿真推演平台，集成 Cesium + Unity 实现二维数据与三维场景实时联动，覆盖政策模拟、地块更新、交通治理等核心功能。获区域数字经济创新奖。',
-    link: { href: '#', label: '城市推演仿真' },
-    techStack: ['Vue 3', 'Cesium', 'Unity', 'ECharts', 'TypeScript'],
-    tags: ['智慧城市', '3D 仿真', '数字孪生'],
-  },
-  {
-    name: '上海临港基础设施全量运管平台',
-    description: '城市新基建运营管理平台，统一接入 14 类 150+ 智能网联设备，实现设备全生命周期管理、拓扑可视化与运维闭环，故障处理效率提升 50%。已复制推广至沧州等地。',
-    link: { href: '#', label: '临港运管平台' },
-    techStack: ['Vue 3', 'Element-UI', '高德地图 API', 'ECharts', 'WebSocket', 'uni-app'],
-    tags: ['智慧城市', 'IoT', '设备运维'],
   },
   {
     name: '智合极创 Admin',
