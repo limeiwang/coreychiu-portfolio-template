@@ -26,20 +26,20 @@ export const projects: Array<ProjectItemType> = [
     tags: ['AI', '电商', '视频生成', 'SaaS'],
   },
   {
-    name: 'AnchorAI',
-    description: 'AI 对话书签 Chrome 扩展，在 ChatGPT、Claude、DeepSeek、豆包等 20+ AI 平台上标记重要对话节点，支持快速跳转回溯。',
-    link: { href: '#', label: 'AnchorAI' },
-    logo: '/images/projects/anchor-ai.png',
-    techStack: ['Chrome Extension', 'Manifest V3', 'JavaScript', 'Service Worker'],
-    tags: ['Chrome扩展', 'AI工具', '浏览器插件'],
-  },
-  {
     name: 'Pixel Pet 像素宠物助手',
     description: 'Chrome 浏览器像素风格悬浮宠物助手，集成番茄钟、笔记、待办与自定义提醒功能，支持 4 种职业主题皮肤，纯 CSS 像素动画实现。',
     link: { href: '#', label: 'Pixel Pet' },
     logo: '/images/projects/pixel-pet.png',
     techStack: ['Chrome Extension', 'Manifest V3', 'CSS Pixel Art', 'Side Panel API'],
     tags: ['Chrome扩展', '番茄钟', '像素风格', '效率工具'],
+  },
+  {
+    name: 'AnchorAI',
+    description: 'AI 对话书签 Chrome 扩展，在 ChatGPT、Claude、DeepSeek、豆包等 20+ AI 平台上标记重要对话节点，支持快速跳转回溯。',
+    link: { href: '#', label: 'AnchorAI' },
+    logo: '/images/projects/anchor-ai.png',
+    techStack: ['Chrome Extension', 'Manifest V3', 'JavaScript', 'Service Worker'],
+    tags: ['Chrome扩展', 'AI工具', '浏览器插件'],
   },
   {
     name: '地图工厂',
