@@ -44,7 +44,7 @@ export const projects: Array<ProjectItemType> = [
   {
     name: '地图工厂',
     description: '基于 Vue 3 的地图工具应用，支持坐标系统转换（WGS84/GCJ02/BD09）、地理数据文件压缩与批量处理，集成 Element Plus UI。',
-    link: { href: '#', label: '地图工厂' },
+    link: { href: 'py.limw.top', label: '地图工厂' },
     logo: '/images/projects/map-app.png',
     techStack: ['Vue 3', 'TypeScript', 'Vite', 'Element Plus', 'Pinia', 'coordtransform'],
     tags: ['地图', 'Vue', '坐标转换'],
