@@ -17,7 +17,13 @@ scp "$TAR_FILE" $SERVER:$REMOTE_DIR/
 echo "🔨 3/4 安装依赖 & 构建..."
 ssh $SERVER "cd $REMOTE_DIR && rm -rf node_modules .next && tar -xzf blog.tar.gz && npm install && npm run build && rm -rf .next/cache"
 
-echo "🚀 4/4 重启服务..."
-ssh $SERVER "pm2 restart blog && sleep 2 && rm -rf /www/server/nginx/proxy_cache_dir/* && pm2 status"
+echo "🚀 4/4 清缓存 & 重启..."
+ssh $SERVER "\
+  rm -rf /www/server/nginx/proxy_cache_dir/* && \
+  pm2 stop blog 2>/dev/null; \
+  fuser -k 3002/tcp 2>/dev/null; \
+  pm2 start blog && \
+  sleep 3 && \
+  pm2 status | grep blog"
 
 echo "✅ 博客部署完成"
