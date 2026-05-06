@@ -20,7 +20,7 @@ export const projects: Array<ProjectItemType> = [
   {
     name: '电商视频分镜AI',
     description: 'AI 驱动的电商视频分镜生成器，上传商品图片即可自动生成包含 9 个镜头的专业级视频分镜脚本，支持 TikTok、抖音、Amazon 多平台适配。',
-    link: { href: '#', label: '电商视频分镜AI' },
+    link: { href: 'story.limw.top', label: '电商视频分镜AI' },
     logo: '/images/projects/ecommerce-storyboard.ico',
     techStack: ['Next.js 16', 'TypeScript', 'Prisma', 'PostgreSQL', '豆包大模型', '智谱 GLM-4V'],
     tags: ['AI', '电商', '视频生成', 'SaaS'],
@@ -52,7 +52,7 @@ export const projects: Array<ProjectItemType> = [
   {
     name: '门店经营数字化系统',
     description: '面向连锁门店的 SaaS 数字化经营系统，集 POS 收银、会员管理、商品库存与小程序商城于一体，内置 AI OCR 智能入库功能。',
-    link: { href: '#', label: '门店经营数字化系统' },
+    link: { href: 'pos.limw.top', label: '门店经营数字化系统' },
     logo: '/images/projects/retail.ico',
     techStack: ['Vue 3', 'Pinia', 'uni-app', 'Express', 'Sequelize', 'MySQL', 'JWT'],
     tags: ['SaaS', '全栈', 'POS收银', 'AI OCR'],
