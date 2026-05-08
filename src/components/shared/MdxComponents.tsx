@@ -163,23 +163,36 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   table: (props: any) => (
-    <div className="my-8 overflow-auto rounded-lg shadow-md">
-      <table 
+    <div className="not-prose my-8 overflow-auto rounded-lg shadow-md">
+      <table
         className="w-full border-collapse text-left text-sm"
-        {...props} 
+        {...props}
       />
     </div>
   ),
-  th: (props: any) => (
-    <th 
-      className="border-b border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-4 py-3 font-medium" 
-      {...props} 
+  thead: (props: any) => (
+    <thead
+      className="border-b-2 border-zinc-300 dark:border-zinc-600"
+      {...props}
     />
   ),
+  th: (props: any) => (
+    <th
+      className="bg-zinc-50 dark:bg-zinc-800 px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"
+      {...props}
+    />
+  ),
+  tbody: (props: any) => (
+    <tbody
+      className="divide-y divide-zinc-200 dark:divide-zinc-800"
+      {...props}
+    />
+  ),
+  tr: (props: any) => <tr {...props} />,
   td: (props: any) => (
-    <td 
-      className="border-b border-zinc-200 dark:border-zinc-800 px-4 py-3" 
-      {...props} 
+    <td
+      className="px-4 py-3 text-zinc-700 dark:text-zinc-300"
+      {...props}
     />
   ),
   code: CustomCode,

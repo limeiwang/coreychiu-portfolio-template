@@ -21,8 +21,7 @@ export default function typographyStyles({ theme }: PluginUtils) {
         '--tw-prose-pre-code': 'var(--tw-prose-invert-pre-code)',
         '--tw-prose-pre-bg': 'var(--tw-prose-invert-pre-bg)',
         '--tw-prose-pre-border': 'var(--tw-prose-invert-pre-border)',
-        '--tw-prose-th-borders': 'var(--tw-prose-invert-th-borders)',
-        '--tw-prose-td-borders': 'var(--tw-prose-invert-td-borders)',
+        // table borders handled by custom MDX components
       },
     },
     DEFAULT: {
@@ -44,8 +43,7 @@ export default function typographyStyles({ theme }: PluginUtils) {
         '--tw-prose-pre-code': theme('colors.zinc.100'),
         '--tw-prose-pre-bg': theme('colors.zinc.900'),
         '--tw-prose-pre-border': 'transparent',
-        '--tw-prose-th-borders': theme('colors.zinc.200'),
-        '--tw-prose-td-borders': theme('colors.zinc.100'),
+        // table borders handled by custom MDX components
 
         '--tw-prose-invert-body': theme('colors.zinc.400'),
         '--tw-prose-invert-headings': theme('colors.zinc.200'),
@@ -64,8 +62,7 @@ export default function typographyStyles({ theme }: PluginUtils) {
         '--tw-prose-invert-pre-code': theme('colors.zinc.100'),
         '--tw-prose-invert-pre-bg': 'rgb(0 0 0 / 0.4)',
         '--tw-prose-invert-pre-border': theme('colors.zinc.200 / 0.1'),
-        '--tw-prose-invert-th-borders': theme('colors.zinc.700'),
-        '--tw-prose-invert-td-borders': theme('colors.zinc.800'),
+        // table borders handled by custom MDX components
 
         // Base
         color: 'var(--tw-prose-body)',
@@ -227,56 +224,9 @@ export default function typographyStyles({ theme }: PluginUtils) {
           },
         },
 
-        // Tables
-        table: {
-          width: '100%',
-          tableLayout: 'auto',
-          textAlign: 'left',
-          fontSize: theme('fontSize.sm')[0],
-        },
-        thead: {
-          borderBottomWidth: '1px',
-          borderBottomColor: 'var(--tw-prose-th-borders)',
-        },
-        'thead th': {
-          color: 'var(--tw-prose-headings)',
-          fontWeight: theme('fontWeight.semibold'),
-          verticalAlign: 'bottom',
-          paddingBottom: theme('spacing.2'),
-        },
-        'thead th:not(:first-child)': {
-          paddingLeft: theme('spacing.2'),
-        },
-        'thead th:not(:last-child)': {
-          paddingRight: theme('spacing.2'),
-        },
-        'tbody tr': {
-          borderBottomWidth: '1px',
-          borderBottomColor: 'var(--tw-prose-td-borders)',
-        },
-        'tbody tr:last-child': {
-          borderBottomWidth: 0,
-        },
-        'tbody td': {
-          verticalAlign: 'baseline',
-        },
-        tfoot: {
-          borderTopWidth: '1px',
-          borderTopColor: 'var(--tw-prose-th-borders)',
-        },
-        'tfoot td': {
-          verticalAlign: 'top',
-        },
-        ':is(tbody, tfoot) td': {
-          paddingTop: theme('spacing.2'),
-          paddingBottom: theme('spacing.2'),
-        },
-        ':is(tbody, tfoot) td:not(:first-child)': {
-          paddingLeft: theme('spacing.2'),
-        },
-        ':is(tbody, tfoot) td:not(:last-child)': {
-          paddingRight: theme('spacing.2'),
-        },
+        // Tables — styled by custom MDX components (MdxComponents.tsx)
+        // prose table/thead/tbody/tr/th/td styles are intentionally removed
+        // to avoid conflicts with the custom Tailwind classes on MDX elements.
       },
     },
   }
