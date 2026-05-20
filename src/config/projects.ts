@@ -18,6 +18,14 @@ export type ProjectItemType = {
 
 export const projects: Array<ProjectItemType> = [
   {
+    name: '微信文本人性化引擎',
+    description: 'AI 文本人性化优化工具，自动去除「值得注意的是」、「综上所述」等 AI 套话，支持中文和英文。提供 Web 编辑器、Chrome 扩展（划词右键即用）和 CLI 三端入口，内置短句重排与多分类规则引擎。',
+    link: { href: 'wechat.limw.top', label: '微信文本人性化引擎' },
+    logo: '/images/projects/wechat-ai-engine.png',
+    techStack: ['Next.js 15', 'React 19', 'TypeScript', 'TailwindCSS 4', 'Chrome Extension MV3', 'esbuild'],
+    tags: ['AI', '文本优化', 'Chrome扩展', 'CLI工具'],
+  },
+  {
     name: '电商视频分镜AI',
     description: 'AI 驱动的电商视频分镜生成器，上传商品图片即可自动生成包含 9 个镜头的专业级视频分镜脚本，支持 TikTok、抖音、Amazon 多平台适配。',
     link: { href: 'story.limw.top', label: '电商视频分镜AI' },

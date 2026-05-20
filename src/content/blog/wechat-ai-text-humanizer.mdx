@@ -1,0 +1,184 @@
+---
+title: '让 AI 文本更像真人——微信文本人性化引擎开发实录'
+description: '纯正则实现的中英文 AI 文本"去套话"工具。覆盖规则引擎设计、Chrome 扩展划词即用、CLI 批量处理，以及中文 NLP 规则工程里那些没想到的坑。'
+author: 'limeiwang'
+date: '2026-05-20'
+---
+
+> 产品定位：AI 文本后处理工具 | 技术栈：Next.js 15 + React 19 + TailwindCSS 4 + Chrome Extension MV3 + esbuild | 源码：私有项目
+
+## 一、为什么要做这个工具？
+
+不管是 ChatGPT、Claude 还是文心一言，AI 生成的文本都有一个共同的毛病——**一看就是 AI 写的**。
+
+中文尤其明显。「值得注意的是」、「综上所述」、「从技术角度来看」——这些短语单独看没问题，但 AI 每段话都来一遍，读起来就像在念论文摘要。英文也一样，`It is worth noting that`、`First of all`、`In conclusion` 几乎成了 AI 的 signature。
+
+**大模型被训练得"太有礼貌"了**。它在回答里加了一大堆过渡词、免责声明和总结套话，写论文没问题，但发微信只会让人读着生硬和啰嗦。
+
+我的需求很简单：股票监控系统每天通过微信推送选股报告和买卖信号，AI 生成的分析文本不能直接发。手动一条条删不现实——所以需要一个自动化工具。
+
+## 二、产品设计
+
+**把 AI 文本过一道"去套话"管道，保留实质内容，去掉废话**。
+
+三个入口，覆盖不同场景：
+
+- **Web 编辑器**：粘贴文本 → 可视化调参 → 即时预览 Before/After
+- **Chrome 扩展**：选中文本 → 右键菜单 → 一键优化 → 自动替换剪贴板
+- **CLI 工具**：`echo "text" | npx tsx cli/index.ts`，设计为可嵌入其他项目
+
+用户可调节的参数有两个：
+1. **套话类型**：10 类（中文 6 类 + 英文 4 类），可单独开关——比如"过渡词可以去掉，但免责声明我想保留"
+2. **短句参数**：每段最多字数、最多行数，超出则截断
+
+## 三、技术架构
+
+```
+输入文本 → Parser（段落分割） → Humanizer Pipeline → Renderer（微信格式） → 输出
+                                    │
+                          ┌─────────┼─────────┐
+                     CN Categories  │  EN Categories
+                   (hedging/summary │ (hedging/conclusion
+                    /transitions/   │  /transitions/
+                    perspective/    │  perspective/filler)
+                    filler/ending)  │
+                                    │
+                              Shortener
+                          (断句 + 缩句 + 去重)
+```
+
+三层管道：
+
+- **Parser**：按空行分割段落区块，保留空行的语义分隔
+- **Humanizer**：核心引擎。每个段落依次过 N 道规则，支持分类开关。纯正则，零依赖
+- **Renderer**：将优化结果重新渲染为微信友好的格式——空行间距、段落缩进、Bullet List 对齐
+
+任何一层都可以被替换或关闭。要适配钉钉/Lark，只需要加一个 Renderer。
+
+## 四、Humanizer 规则引擎——最复杂的部分
+
+### 4.1 纯正则，零依赖
+
+MVP 阶段没用 NLP 模型，选了纯正则。**确定性比杀鸡用牛刀更有用**——套话无非是模式匹配，AI 翻来覆去就那么几十个短语，正则够用、可调试、可预测。
+
+### 4.2 中文 6 类规则
+
+按处理顺序排列（顺序决定了正确性）：
+
+| 类型 | 示例 | 策略 |
+|------|------|------|
+| 免责套话 | 值得注意的是、不可否认的是 | 直接删除（可出现在句中任何位置） |
+| 冗余总结 | 基于以上分析、综上所述 | 句首匹配，删除整句引导 |
+| 过渡套话 | 首先、其次、综合来看 | 句首匹配，保留原句连接 |
+| 视角套话 | 从技术角度来看、在宏观层面上 | 句首匹配，删除视角设定 |
+| 填充套话 | 在一定程度上、换言之 | 句中任意位置，直接删除 |
+| 模板结尾 | 建议投资者保持谨慎乐观 | 整句删除 |
+
+### 4.3 英文 5 类规则
+
+同样按顺序处理：
+
+| 类型 | 示例 | 策略 |
+|------|------|------|
+| Hedging | It is worth noting that | 句首/句中，直接删除 |
+| Conclusion | In conclusion, To sum up | 句首匹配 |
+| Transitions | First of all, Secondly | 句首匹配 |
+| Perspective | From a technical perspective | 句首匹配 |
+| Filler | Generally speaking | 句首/句中，直接删除 |
+
+### 4.4 中文边界匹配的坑
+
+中文不像英文有天然的空格分词。正则匹配句首时，英文用 `(^|[.!?]\s*)` 就够了，但中文还要考虑句号、问号、感叹号。
+
+一开始只考虑了 `。(句号)` 做边界，结果"今天天气不错。首先，从技术角度来看..."——优化后变成了"今天天气不错。从技术角度来看..."——"首先"去掉了，但"从技术角度来看"还在。
+
+**解决办法**：规则按正确顺序排列。冗余总结和视角类规则必须在过渡规则之前处理。如果"基于以上分析"和"首先"同时出现，要先去掉"基于以上分析"，再去掉"首先"。顺序不对，"首先"就匹配不到（因为它前面不是句号，而是"分析"这个词）。
+
+### 4.5 句首大写保护
+
+英文句子去掉句首短语后，第一个字母可能变成小写。比如 `First of all, the market is strong.` → 去掉 `First of all, ` 后得到 `the market is strong.`。
+
+修复方案：末尾过一道 `capitalizeSentences()`，把每个句子开头的字母大写。
+
+```typescript
+function capitalizeSentences(text: string): string {
+  return text
+    .replace(/(^|[.!?]\s*)([a-z])/g, (_, pre, char) => pre + char.toUpperCase())
+    .trim();
+}
+```
+
+### 4.6 数据效果
+
+70 个 E2E 测试覆盖了全部规则的正确性和边界情况：
+
+- 中文内容：通常缩减 15-35%
+- 英文内容：通常缩减 10-25%
+- 报告类文本（如选股结果）：40-50% 缩减 —— 因为 AI 生成的总结套话最多
+
+## 五、Chrome 扩展：划词即用
+
+选中网页上的 AI 文本，右键 → "优化文本" → 结果自动复制到剪贴板。这是最常用的使用方式。
+
+几个值得说的技术细节：
+
+**Content Script 动态注入**
+Chrome MV3 的 content script 并不是在所有页面都自动加载。如果页面加载后才安装扩展，context menu 点击时会收不到响应。
+
+解决方案：background.js 在点击菜单时先 `chrome.tabs.sendMessage` 发 ping，如果超时则用 `chrome.scripting.executeScript` 动态注入。
+
+**Tooltip 定位**
+优化后的 tooltip 用 `position: fixed` 相对于视口定位。`getBoundingClientRect()` 返回的坐标已经是视口相对坐标，不需要加 `window.scrollY/scrollX`——这是一个踩过的坑，加了反而会让 tooltip 偏移。
+
+**CSP 兼容**
+有些网站会通过 Content-Security-Policy 禁止 `<style>` 标签注入。解决方案：改用内联 `style` 属性设置样式，完全绕过 CSP。
+
+## 六、CLI 工具：让优化器可嵌入
+
+Web 和扩展给"人"用，但我真正要的是**嵌入到其他项目中**。
+
+Stock-monitor 是 Python 项目，每天定时跑选股、买卖信号和收盘复盘，通过 Hermes gateway 发微信。改造方式很简单：在 `send_bridge.py` 里发微信前，先把文本管道给 `wechat-optimize.js`：
+
+```python
+result = subprocess.run(
+    ["node", "wechat-optimize.js", "--json"],
+    input=text, capture_output=True, text=True, timeout=10,
+)
+data = json.loads(result.stdout)
+text = data["optimized"]
+```
+
+不侵入原有逻辑，三份 Python 脚本零改动。
+
+为了跨项目分发，我用 esbuild 把 CLI 打包成单文件 CJS bundle：
+
+```bash
+node scripts/build-cli.js
+# 输出: cli/dist/wechat-optimize.js (15KB)
+```
+
+零外部依赖，复制到任意项目即可运行。
+
+## 七、遇到的坑
+
+| 问题 | 原因 | 解决 |
+|------|------|------|
+| 句首过渡词删不掉 | 前一类规则残留文本打乱了句首边界 | 调整 6 类规则的执行顺序 |
+| 英文句首小写 | 去掉短语后首字母恢复原文大小写 | 后处理 capitalizeSentences() |
+| Chrome tooltip 位置偏移 | 给 position:fixed 加了 scrollY | 去掉 scroll 修正 |
+| Tooltip 样式被 CSP 拦截 | 网站禁止 `<style>` 注入 | 改用内联 style 属性 |
+| esbuild bundle 太大 | 输出 ESM 格式 + 依赖未 external | 改 CJS 格式，external Node builtins |
+| 中英混排的标点处理 | 中文句号不影响英文正则边界 | 在所有英文 pattern 的边界组里加上中文句号 |
+
+## 八、总结
+
+**不要低估规则工程的复杂度**。
+
+20 条正则看起来简单，但要覆盖中英混排、嵌套套话、标点差异、顺序依赖——每一步"小聪明"最终都变成了 bug。70 个 E2E 测试才兜住。
+
+纯正则还是 LLM 做后处理？零成本、可预测、可调试是正则的好处；代价是手工维护规则库，AI 在变，套话也在变。长期看可能需要一个轻量分类模型来辅助。
+
+下一步计划：
+1. **更多 Renderer 适配**：Lark、钉钉、Telegram 各有不同的消息格式约束
+2. **规则在线市场**：用户可以提交自定义规则，形成社区规则库
+3. **更多语言支持**：日语和韩语的敬语也是常见的 AI 文本标记
