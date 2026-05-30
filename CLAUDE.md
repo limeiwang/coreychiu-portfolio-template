@@ -112,6 +112,7 @@ The WeChat social link uses `qrCode: '/wechat.jpg'` instead of `href`. Both `Soc
 
 - **Simple Icons slugs**: `pinia` and `visualstudiocode` do NOT exist in `simple-icons` v14 (the version used by `react-icon-cloud`). The tech icons list uses `element` and `webstorm` as replacements. Always verify slugs against `https://cdn.jsdelivr.net/npm/simple-icons@14/icons/<slug>.svg` before adding new tech icons.
 - **`ssr: false` in Server Components**: Next.js 16 does not allow `next/dynamic({ ssr: false })` directly in Server Components. The pattern must be: Server Component → Client Component wrapper → `dynamic({ ssr: false })`.
+- **Visit stats data directory**: Runtime data is stored in `data/visit-stats/` (NOT `/tmp/blog-visit-stats/`). The directory is gitignored and persisted on the VPS server; do NOT commit visit count files.
 - **The date locale is `zh-CN`** (`src/lib/formatDate.ts`). RSS feed and blog dates render in Chinese format.
 
 ## Notes

@@ -83,6 +83,9 @@ web_modules/
 .cache
 .parcel-cache
 
+# Runtime data (visit stats, persisted on server)
+data/
+
 # Next.js build output
 .next
 out
