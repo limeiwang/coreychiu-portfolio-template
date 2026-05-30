@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-const DATA_DIR = '/tmp/blog-visit-stats';
+const DATA_DIR = path.join(process.cwd(), 'data', 'visit-stats');
 const TOTAL_FILE = path.join(DATA_DIR, 'total.json');
 const DAILY_FILE = path.join(DATA_DIR, 'daily.json');
 

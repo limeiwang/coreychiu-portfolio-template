@@ -1,11 +1,11 @@
 ---
-title: '让 AI 文本更像真人——微信文本人性化引擎开发实录'
+title: '让 AI 文本更像真人——Unbot 开发实录'
 description: '纯正则实现的中英文 AI 文本"去套话"工具。覆盖规则引擎设计、Chrome 扩展划词即用、CLI 批量处理，以及中文 NLP 规则工程里那些没想到的坑。'
 author: 'limeiwang'
 date: '2026-05-20'
 ---
 
-> 产品定位：AI 文本后处理工具 | 技术栈：Next.js 15 + React 19 + TailwindCSS 4 + Chrome Extension MV3 + esbuild | 源码：私有项目
+> 产品定位：AI 文本后处理工具 | 技术栈：Next.js 15 + React 19 + TailwindCSS 4 + Chrome Extension MV3 + esbuild | npm：`@unbot/core` · `@unbot/cli`
 
 ## 一、为什么要做这个工具？
 
@@ -13,7 +13,7 @@ date: '2026-05-20'
 
 中文尤其明显。「值得注意的是」、「综上所述」、「从技术角度来看」——这些短语单独看没问题，但 AI 每段话都来一遍，读起来就像在念论文摘要。英文也一样，`It is worth noting that`、`First of all`、`In conclusion` 几乎成了 AI 的 signature。
 
-**大模型被训练得"太有礼貌"了**。它在回答里加了一大堆过渡词、免责声明和总结套话，写论文没问题，但发微信只会让人读着生硬和啰嗦。
+**大模型被训练得"太有礼貌了"**。它在回答里加了一大堆过渡词、免责声明和总结套话，写论文没问题，但发微信只会让人读着生硬和啰嗦。
 
 我的需求很简单：股票监控系统每天通过微信推送选股报告和买卖信号，AI 生成的分析文本不能直接发。手动一条条删不现实——所以需要一个自动化工具。
 
@@ -25,7 +25,7 @@ date: '2026-05-20'
 
 - **Web 编辑器**：粘贴文本 → 可视化调参 → 即时预览 Before/After
 - **Chrome 扩展**：选中文本 → 右键菜单 → 一键优化 → 自动替换剪贴板
-- **CLI 工具**：`echo "text" | npx tsx cli/index.ts`，设计为可嵌入其他项目
+- **CLI 工具**：`echo "text" | unbot`，设计为可嵌入其他项目
 
 用户可调节的参数有两个：
 1. **套话类型**：10 类（中文 6 类 + 英文 4 类），可单独开关——比如"过渡词可以去掉，但免责声明我想保留"
@@ -137,11 +137,11 @@ Chrome MV3 的 content script 并不是在所有页面都自动加载。如果�
 
 Web 和扩展给"人"用，但我真正要的是**嵌入到其他项目中**。
 
-Stock-monitor 是 Python 项目，每天定时跑选股、买卖信号和收盘复盘，通过 Hermes gateway 发微信。改造方式很简单：在 `send_bridge.py` 里发微信前，先把文本管道给 `wechat-optimize.js`：
+Stock-monitor 是 Python 项目，每天定时跑选股、买卖信号和收盘复盘，通过 Hermes gateway 发微信。改造方式很简单：在 `send_bridge.py` 里发微信前，先把文本管道给 `unbot`：
 
 ```python
 result = subprocess.run(
-    ["node", "wechat-optimize.js", "--json"],
+    ["unbot", "--json"],
     input=text, capture_output=True, text=True, timeout=10,
 )
 data = json.loads(result.stdout)
@@ -150,11 +150,11 @@ text = data["optimized"]
 
 不侵入原有逻辑，三份 Python 脚本零改动。
 
-为了跨项目分发，我用 esbuild 把 CLI 打包成单文件 CJS bundle：
+为了跨项目分发，我用 esbuild 把 CLI 打包成单文件 CJS bundle，发布到 npm：
 
 ```bash
-node scripts/build-cli.js
-# 输出: cli/dist/wechat-optimize.js (15KB)
+npm install -g @unbot/cli
+echo "值得注意的是..." | unbot
 ```
 
 零外部依赖，复制到任意项目即可运行。

@@ -1,0 +1,67 @@
+---
+title: 'NVIDIA Build 注册卡在手机验证？100 多个免费模型随便调'
+description: '无需绑卡、不限总量、OpenAI 兼容。注册避坑和值得试的模型，实测一起说了。'
+date: '2026-05-27'
+---
+
+NVIDIA 最近搞了个 Build 平台，本质是个 AI 模型 API 超市，底层跑的是自家 NIM 推理微服务。免费，不用绑卡，注册直接薅。
+
+为什么说它香：API 格式跟 OpenAI 一模一样，把 `base_url` 和 `api_key` 一换就能切过去。目前限速 40 次/分钟，但在这个限额内不限总量。集成了 DeepSeek、Kimi、GLM、Llama 等一百多个模型，一个 Key 全都能调。
+
+---
+
+## 注册流程
+
+注册本身不复杂，但手机验证那一步能卡掉一半人：
+
+1. 访问 [build.nvidia.com](https://build.nvidia.com)，邮箱注册。正常流程。
+2. 收验证码填进去。收不到看看垃圾箱。
+3. **高危步骤**：创建云账户（名字必须英文/数字），+86 手机号验证。经常报错"号码超限"。我试下来中国移动的号成功率最高，实在不行找朋友借个号试试。
+4. 进 API Keys 页面生成 Key，有效期选 Never Expire。密钥以 `nvapi-` 开头，只显示一次——忘了就得重新生成，务必当场复制。
+
+---
+
+## 值得试的模型
+
+NVIDIA 首页推了四款，我挨个试了一遍：
+
+| 模型 | 参数 | 几句话说明 |
+|------|------|-----------|
+| **DeepSeek V4 Pro** | 1.6T MoE（49B 活跃） | DeepSeek 最新的旗舰，100 万上下文，MIT 开源。编程和推理都很强，首推这个 |
+| **GLM 5.1** | 754B MoE（40B 活跃） | 智谱家的，Agent 和工具调用做得不错，MIT 开源 |
+| **Nemotron 3 Nano Omni** | 30B（3B 活跃） | 英伟达自己的多模态模型，能处理文本、图片、音频、视频 |
+| **Gemma 4 31B IT** | 31B | Google 出的，轻量，指令遵循好 |
+
+首页之外还有 **Kimi K2**（1T MoE，适合读长文档）、**MiniMax M2.7**（响应快，适合 Agent 场景）、**Qwen3-Coder 480B**（代码专用），感兴趣都可以试试。
+
+---
+
+## 接入方式
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key="nvapi-xxxxxx"
+)
+
+completion = client.chat.completions.create(
+    model="deepseek-ai/deepseek-v4-pro",
+    messages=[{"role": "user", "content": "你好"}]
+)
+```
+
+就改两行代码的事。
+
+---
+
+## 缺点也得说
+
+限速 40 RPM 摆在那，高并发场景别想了。热门模型（尤其 Kimi）高峰期偶尔返回 503，遇到的话换个时间段或者切 MiniMax。
+
+另外英伟达推这个免费层，说到底是为了卖 NIM 生态和 GPU 算力。目前用着没问题，但哪天政策收紧也不奇怪，别把它当长期依赖就行。
+
+---
+
+别指望拿它跑生产，但个人项目或者尝鲜，这是目前最省事的免费方案了。

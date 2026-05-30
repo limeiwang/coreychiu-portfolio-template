@@ -18,10 +18,10 @@ export type ProjectItemType = {
 
 export const projects: Array<ProjectItemType> = [
   {
-    name: '微信文本人性化引擎',
+    name: 'Unbot — AI Text Humanizer',
     description: 'AI 文本人性化优化工具，自动去除「值得注意的是」、「综上所述」等 AI 套话，支持中文和英文。提供 Web 编辑器、Chrome 扩展（划词右键即用）和 CLI 三端入口，内置短句重排与多分类规则引擎。',
-    link: { href: 'wechat.limw.top', label: '微信文本人性化引擎' },
-    logo: '/images/projects/wechat-ai-engine.png',
+    link: { href: 'unbot.limw.top', label: 'Unbot' },
+    logo: '/images/projects/unbot.png',
     techStack: ['Next.js 15', 'React 19', 'TypeScript', 'TailwindCSS 4', 'Chrome Extension MV3', 'esbuild'],
     tags: ['AI', '文本优化', 'Chrome扩展', 'CLI工具'],
   },
@@ -77,7 +77,14 @@ export const projects: Array<ProjectItemType> = [
 
 export const githubProjects: Array<ProjectItemType> = [
   {
-    name: 'meiwang-portfolio',
+    name: 'claude-hud (DeepSeek 余额版)',
+    description: '基于 claude-hud 增加 DeepSeek 余额显示功能。自动检测 ANTHROPIC_BASE_URL 是否指向 DeepSeek，并在 HUD 状态栏展示账户余额，缓存 5 分钟。',
+    link: { href: 'github.com/limeiwang/claude-hud', label: 'Claude HUD' },
+    gitStars: 0,
+    gitForks: 0,
+  },
+  {
+    name: 'coreychiu-portfolio-template',
     description: '基于 Next.js 16 + TailwindCSS + Shadcn/UI 的个人博客模板，支持 MDX 博客、RSS、多分析工具与暗色模式。',
     link: { href: 'github.com/limeiwang/coreychiu-portfolio-template', label: 'Portfolio Template' },
     gitStars: 0,

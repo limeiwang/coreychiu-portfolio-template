@@ -1,0 +1,96 @@
+---
+title: 'Claude Code 用 DeepSeek 的人，都有一个 HUD 空白要填'
+description: '官方 claude-hud 只支持 Claude API 展示用量，DeepSeek 用户那块一直是空的。我 fork 了一份，加上了余额显示。'
+author: 'limeiwang'
+date: '2026-05-22'
+---
+
+> 项目在这 → [github.com/limeiwang/claude-hud](https://github.com/limeiwang/claude-hud) `feat/deepseek-balance` 分支
+
+Claude HUD 这个插件挺好用的——上下文用量、工具调用、Agent 状态都在底下那条状态栏上。但我用不了，因为我模型接的是 DeepSeek：
+
+```
+ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+ANTHROPIC_AUTH_TOKEN=sk-xxxx
+```
+
+协议兼容没问题，跑 Claude Code 一切正常。问题是 HUD 的用量数据从 stdin 的 JSON 里读，DeepSeek 不回传 `rate_limits` 和 `usage`，那块就一直空着。
+
+官方 claude-hud 不可能去对接 DeepSeek 的余额接口，跟 Anthropic 又没关系。理解归理解，但每天看着空一块还是有点烦。
+
+## 怎么搞的
+
+翻了下源码，加个 fallback 就行。DeepSeek 有个 `/user/balance` 接口，传 API Key 返回余额。在 HUD 拿不到 stdin 数据时，去拉余额显示出来。
+
+先判断是不是 DeepSeek——看 `ANTHROPIC_BASE_URL` 里有没有 "deepseek"，没有就跳过：
+
+```typescript
+function isDeepSeekEndpoint(): boolean {
+  const baseUrl = process.env.ANTHROPIC_BASE_URL?.trim()
+  if (!baseUrl) return false
+  return /deepseek/i.test(baseUrl)
+}
+```
+
+然后调接口。一开始还担心 DeepSeek 的 API 要不要额外鉴权，试了一下发现就是标准 Bearer token，直接调就行：
+
+```typescript
+async function fetchBalanceLabel(apiKey: string): Promise<string | null> {
+  const response = await fetch('https://api.deepseek.com/user/balance', {
+    headers: { Authorization: `Bearer ${apiKey}` },
+    signal: AbortSignal.timeout(5000),
+  })
+  if (!response.ok) return null
+  const data = await response.json()
+  // balance_infos[0].total_balance
+  // 返回 "Balance ¥xxx.xx" 或 "$xxx.xx"
+}
+```
+
+5 秒超时，挂了就算了，不影响 HUD 其他东西。
+
+缓存倒是想了一下。HUD 每 300ms 刷新一次，每次都调接口肯定不行。写了个文件缓存扔到 `~/.claude/plugins/claude-hud/.deepseek-cache.json`，5 分钟内不重复请求。
+
+最后在原有用量的获取链里加了一步，就一行代码：
+
+```typescript
+usageData = deps.getUsageFromStdin(stdin)
+if (!usageData) {
+  usageData = (await deps.getDeepSeekUsage()) ?? null
+}
+if (!usageData) {
+  usageData = deps.getUsageFromExternalSnapshot(config, deps.now())
+}
+```
+
+拿到余额填进 `UsageData.balanceLabel`，HUD 自己会展示。最终效果就是状态栏上多了个 `Balance ¥99.99`。
+
+整个文件 130 行，大部分是类型定义和缓存读写。
+
+## 安装步骤
+
+DeepSeek 用户想试试的话：
+
+```bash
+# 1. 先装官方版完成注册
+/plugin marketplace add jarrodwatts/claude-hud
+/plugin install claude-hud
+/claude-hud:setup
+
+# 2. 替换成我的 fork
+cd ~/.claude/plugins
+git clone -b feat/deepseek-balance https://github.com/limeiwang/claude-hud.git
+cd claude-hud && npm install
+
+# 3. 改 statusLine 路径
+# ~/.claude/settings.json 里找到 statusLine.command
+# 从 cache/ 目录改成 plugins/ 目录
+```
+
+有个坑要注意：装完检查一下 `statusLine.command` 指向的是 `plugins/claude-hud/dist/index.js`，不是 `cache/` 下那个官方版。我第一次发给朋友就栽在这——他说装完没效果，查了半天发现 HUD 加载的还是原版。路径这个事不看源码根本想不到。
+
+## 一点感想
+
+130 行代码解决了一个不算刚需、但每天在眼前晃的问题。现在瞟一眼 HUD 就能看到余额，还挺安心。
+
+如果还有下个版本，想加个余额告警——用 DeepSeek 最怕的就是扣完了没发现，会话断到一半。
