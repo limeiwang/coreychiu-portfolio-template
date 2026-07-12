@@ -42,6 +42,14 @@ export function Footer() {
                   <p className="text-sm text-muted-foreground">
                     &copy; {new Date().getFullYear()} {name}. All rights reserved.
                   </p>
+                  <a
+                    href="https://beian.miit.gov.cn/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground transition hover:text-primary"
+                  >
+                    冀ICP备2025125784号-1
+                  </a>
                   <ThemeToggle />
                 </div>
                 <SocialLinks className='mt-0'/>

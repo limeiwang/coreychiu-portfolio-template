@@ -18,6 +18,14 @@ export type ProjectItemType = {
 
 export const projects: Array<ProjectItemType> = [
   {
+    name: '深夜书虫俱乐部 · 阅读证书生成器',
+    description: '纯前端 Canvas 图层合成的阅读打卡证书生成器，支持自定义头像圆形裁切、印章叠加与 PNG 高清导出。零后端架构，所有数据仅保存在浏览器内存中。',
+    link: { href: 'cert.limw.top', label: '证书生成器' },
+    logo: '/images/projects/certificate.png',
+    techStack: ['原生 JavaScript', 'Canvas 2D API', 'HTML5', 'CSS3', 'Google Fonts'],
+    tags: ['Canvas', '前端工具', '图像处理', '零后端'],
+  },
+  {
     name: 'Unbot — AI Text Humanizer',
     description: 'AI 文本人性化优化工具，自动去除「值得注意的是」、「综上所述」等 AI 套话，支持中文和英文。提供 Web 编辑器、Chrome 扩展（划词右键即用）和 CLI 三端入口，内置短句重排与多分类规则引擎。',
     link: { href: 'unbot.limw.top', label: 'Unbot' },

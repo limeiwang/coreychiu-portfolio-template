@@ -1,0 +1,268 @@
+---
+title: '用 Canvas 做了个证书生成器，纯前端的'
+description: '填个表单、传个头像就能出证书图，不用后端，数据不离开浏览器。讲讲 7 层图层合成、圆形头像裁切、印章合成这些实现细节。'
+date: '2026-07-12'
+---
+
+前几天折腾了个小东西——**深夜书虫俱乐部 · 阅读证书生成器**。
+
+需求就一句话：用户填信息、上传头像，出来一张带印章的证书 PNG。有个硬性要求——**不能有后端，不能传数据，必须纯前端搞定**。
+
+在线体验：[http://cert.limw.top](http://cert.limw.top)
+
+![证书生成器](/images/blog/certificate-preview.png)
+
+---
+
+## 为什么没上框架？
+
+说实话一开始也想用 React 的，但想了想这玩意儿就一个页面、三个步骤（填表 → 预览 → 下载），用框架有点杀鸡用牛刀。
+
+最后用的原生 HTML + CSS + JS (ES5)，整个项目就一个 `index.html` 文件。
+
+好处很明显：
+
+- 部署就是拷贝文件，零构建
+- 没有 node_modules，加载飞快
+- 兼容性好，IE11 大概率也能跑（我没测过）
+
+缺点也有，状态管理得自己搞，复杂点的东西还是得上框架。但这个场景够用了。
+
+---
+
+## Canvas 图层合成的思路
+
+这个项目最花时间的就是 Canvas 绘制部分。我把它拆成了 7 层，按顺序往上堆：
+
+1. 纸张纹理（渐变底色 + 噪点 + 暗角）
+2. 全屏水印（文字平铺旋转）
+3. 装饰边框（双线圆角矩形）
+4. 用户头像（圆形裁切）
+5. 印章图片
+6. 装饰图案（那个伪二维码）
+7. 文字信息
+
+每层单独封装成一个函数，调试时注释掉某行就能排查问题，挺方便的。
+
+### 先说纸张纹理
+
+```javascript
+function drawPaperLayer(ctx, W, H) {
+  // 渐变底色
+  var grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, "#f6ecdb");
+  grad.addColorStop(1, "#ecdcb8");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // 噪点——模拟纸张质感
+  ctx.save();
+  ctx.globalAlpha = 0.05;
+  for (var i = 0; i < 1800; i++) {
+    ctx.fillStyle = Math.random() > 0.5 ? "#241a14" : "#ffffff";
+    ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+  }
+  ctx.restore();
+
+  // 暗角效果
+  var vign = ctx.createRadialGradient(W/2, H/2, H*0.25, W/2, H/2, H*0.85);
+  vign.addColorStop(0, "rgba(36,26,20,0)");
+  vign.addColorStop(1, "rgba(36,26,20,0.16)");
+  ctx.fillStyle = vign;
+  ctx.fillRect(0, 0, W, H);
+}
+```
+
+这里有几个坑：
+
+- 噪点数量我试了好多遍，800 太少看不出质感，1800 刚好，3000 以上开始影响性能
+- 暗角的半径参数也很讲究，太小没效果，太大整张纸都暗了，`H*0.25` 到 `H*0.85` 这个范围是我试出来的
+
+### 头像怎么裁成圆的
+
+```javascript
+function drawAvatarLayer(ctx, img, cx, cy, r) {
+  ctx.save();
+  
+  // 先画个圆形路径，然后 clip
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.clip();
+  
+  // 等比缩放，类似 CSS 的 object-fit: cover
+  var iw = img.width, ih = img.height;
+  var scale = Math.max((r*2)/iw, (r*2)/ih);
+  var dw = iw*scale, dh = ih*scale;
+  ctx.drawImage(img, cx - dw/2, cy - dh/2, dw, dh);
+  
+  ctx.restore();  // clip 结束
+  
+  // 边框要在 restore 之后画，不然也会被裁掉
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#b3893c";
+  ctx.stroke();
+}
+```
+
+`clip()` 这个 API 很好用，先定义个路径形状，后面的绘制操作就只在这个区域内生效。边框一定要在 `restore()` 之后画，不然圆形边框也会被裁切掉——这个坑我踩了半小时才反应过来。
+
+### 印章那点小细节
+
+印章要是画得端端正正的反而假，真实盖章哪有那么准的：
+
+```javascript
+function drawStampLayer(ctx, stampImg, cx, cy, size) {
+  if (!stampImg) return false;
+
+  ctx.save();
+  ctx.globalAlpha = 0.92;   // 不透明度 92%，稍微透一点
+  ctx.translate(cx, cy);
+  ctx.rotate(-0.12);       // 歪一点点，-6.8 度左右
+  
+  var iw = stampImg.width, ih = stampImg.height;
+  var scale = size / Math.max(iw, ih);
+  var dw = iw * scale, dh = ih * scale;
+  ctx.drawImage(stampImg, -dw/2, -dh/2, dw, dh);  // 以中心为锚点
+  ctx.restore();
+
+  return true;
+}
+```
+
+旋转角度 `-0.12` 弧度是我调了好几个值选的，看起来比较自然。`globalAlpha` 设成 `0.92` 也是为了让印章跟底层文字有一点叠加感，不会显得太"浮"。
+
+### 图片加载的异步问题
+
+Canvas 绘制得等图片加载完才能开始，这里用了 Promise 来协调：
+
+```javascript
+function renderCertificateWhenReady() {
+  var avatarPromise = new Promise(function(resolve) {
+    if (state.avatarDataUrl) {
+      var img = new Image();
+      img.onload = function() { resolve(img); };
+      img.onerror = function() { resolve(null); };  // 加载失败也不能卡住
+      img.src = state.avatarDataUrl;
+    } else {
+      resolve(null);
+    }
+  });
+
+  var stampPromise = new Promise(function(resolve) {
+    var img = new Image();
+    img.onload = function() { resolve(img); };
+    img.onerror = function() { resolve(null); };
+    img.src = STAMP_SRC;
+  });
+
+  Promise.all([avatarPromise, stampPromise]).then(function(results) {
+    renderCertificate(el.canvas, state, results[0], results[1]);
+  });
+}
+```
+
+还有个容易忘的点——字体加载。Google Fonts 是异步的，如果字体没下完就开始画字，Canvas 会 fallback 到默认字体，排版全乱：
+
+```javascript
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(doRender);
+} else {
+  doRender();  // 老浏览器降级处理
+}
+```
+
+---
+
+## 我做了什么 / 还想做什么
+
+### 已完成的
+
+- **[在线地址](http://cert.limw.top)**：7 层 Canvas 合成的证书生成器 v1.0
+- 表单验证：中文姓名正则校验、必填项提示
+- [deploy.sh](https://github.com/your-repo/blob/main/deploy.sh)：SCP 上传 + Nginx 配置一条龙
+- 移动端适配到 480px
+
+### 接下来打算做的
+
+目前只有"阅读证书"一种模板，后面想加几个：
+
+- 结业证书、荣誉证书、会员证书等不同样式
+- 让用户能拖拽调整各元素位置（现在位置都是写死的）
+- 用 localStorage 存一下历史记录，刷新不再丢失
+- 支持导入 Excel 批量生成，打包成 ZIP 下载
+
+看心情排优先级吧。
+
+---
+
+## 为什么不做后端
+
+这个项目的数据流非常简单：
+
+```
+用户输入 → 浏览器内存里存着
+                ↓
+        Canvas 合成出图片
+                ↓
+        用户下载到本地
+```
+
+姓名、照片这种敏感数据压根没离开过浏览器。不需要服务器、不需要数据库、不需要 API，Nginx 托个静态文件就行。
+
+代价也有——刷新页面数据就没了（后续可以加 localStorage），也没法做真正的批量导出。但对于"演示用途"来说完全够用。
+
+---
+
+## 踩过的坑
+
+| 问题 | 怎么回事 | 怎么解决的 |
+|------|----------|-----------|
+| 高清屏上 Canvas 模糊 | 没处理设备像素比 (DPR) | canvas.width 设成显示尺寸 × DPR，CSS 固定显示尺寸 |
+| 字体闪烁一下再变正常 | 字体还没加载完就开始画了 | 等 `document.fonts.ready` 再渲染 |
+| 印章位置总是偏的 | drawImage 默认左上角对齐 | translate 到中心点，然后 `-dw/2, -dh/2` |
+| iOS 上点下载没反应 | Safari 不支持 a 标签的 download 属性 | 提示用户长按图片另存为 |
+
+---
+
+## 部署相关
+
+Nginx 配置很简单，就是托管静态文件：
+
+```nginx
+server {
+    listen 80;
+    server_name cert.limw.top;
+    
+    root /opt/certificate;
+    index index.html;
+    
+    gzip on;  # HTML 从 25KB 压到 6KB
+    
+    # 图片缓存 30 天
+    location ~* \.(png|jpg|gif|ico)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # HTML 不缓存，每次都拉最新
+    location ~* \.html$ {
+        expires -1;
+        add_header Cache-Control "no-store, no-cache";
+    }
+}
+```
+
+部署脚本就是 SCP 上传 + reload Nginx，几秒钟的事。
+
+---
+
+## 小结
+
+这个项目不大，但把 Canvas 2D API 用得挺全的：渐变、裁切路径、变换矩阵、图片合成、异步资源协调……
+
+如果你想做个类似的图片生成器，建议先把每一层的绘制逻辑拆成独立函数，按顺序调用。调试时注释掉某层代码就能快速定位问题，省很多事。
+
+源码在 [GitHub](#)（链接待补），欢迎提 issue。
